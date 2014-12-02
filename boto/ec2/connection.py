@@ -2460,7 +2460,7 @@ class EC2Connection(AWSQueryConnection):
         return self.get_list('DescribeSnapshots', params,
                              [('item', Snapshot)], verb='POST')
 
-    def create_snapshot(self, volume_id, description=None, dry_run=False):
+    def create_snapshot(self, volume_id, description=None, dry_run=False, add_tag=True):
         """
         Create a snapshot of an existing EBS Volume.
 
@@ -2474,6 +2474,9 @@ class EC2Connection(AWSQueryConnection):
         :type dry_run: bool
         :param dry_run: Set to True if the operation should not actually run.
 
+        :type add_tag: bool
+        :param add_tag: Set to False if the operation should not attempt to tag the snapshot.
+
         :rtype: :class:`boto.ec2.snapshot.Snapshot`
         :return: The created Snapshot object
         """
@@ -2484,10 +2487,11 @@ class EC2Connection(AWSQueryConnection):
             params['DryRun'] = 'true'
         snapshot = self.get_object('CreateSnapshot', params,
                                    Snapshot, verb='POST')
-        volume = self.get_all_volumes([volume_id], dry_run=dry_run)[0]
-        volume_name = volume.tags.get('Name')
-        if volume_name:
-            snapshot.add_tag('Name', volume_name)
+        if add_tag:
+            volume = self.get_all_volumes([volume_id], dry_run=dry_run)[0]
+            volume_name = volume.tags.get('Name')
+            if volume_name:
+                snapshot.add_tag('Name', volume_name)
         return snapshot
 
     def delete_snapshot(self, snapshot_id, dry_run=False):
