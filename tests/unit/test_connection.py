@@ -387,6 +387,26 @@ class TestAWSQueryConnectionSimple(TestAWSQueryConnection):
                                  'POST')
         self.assertEqual(resp.read(), b"{'test': 'success'}")
 
+    def test_unhandled_exception(self):
+        HTTPretty.register_uri(HTTPretty.POST,
+                               'https://%s/temp_exception/' % self.region.endpoint,
+                               responses=[])
+
+        def fake_connection(address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+                      source_address=None):
+            raise socket.timeout('fake error')
+
+        socket.create_connection = fake_connection
+
+        conn = self.region.connect(aws_access_key_id='access_key',
+                                   aws_secret_access_key='secret')
+        conn.num_retries = 0
+        with self.assertRaises(socket.error):
+            resp = conn.make_request('myCmd1',
+                                     {'par1': 'foo', 'par2': 'baz'},
+                                     '/temp_exception/',
+                                     'POST')
+
     def test_connection_close(self):
         """Check connection re-use after close header is received"""
         HTTPretty.register_uri(HTTPretty.POST,
@@ -504,6 +524,16 @@ class TestHTTPRequest(unittest.TestCase):
                          {'Some-Header': 'should%20be%20url%20encoded',
                           'User-Agent': UserAgent})
 
+    def test_content_length_str(self):
+        request = HTTPRequest('PUT', 'https', 'amazon.com', 443, None,
+                              None, {}, {}, 'Body')
+        mock_connection = mock.Mock()
+        request.authorize(mock_connection)
+
+        # Ensure Content-Length header is a str. This is more explicit than
+        # relying on other code cast the value later. (Python 2.7.0, for
+        # example, assumes headers are of type str.)
+        self.assertIsInstance(request.headers['Content-Length'], str)
 
 if __name__ == '__main__':
     unittest.main()

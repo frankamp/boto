@@ -1,9 +1,9 @@
 ####
 boto
 ####
-boto 2.33.0
+boto 2.36.0
 
-Released: 08-Oct-2014
+Released: 27-Jan-2015
 
 .. image:: https://travis-ci.org/boto/boto.svg?branch=develop
         :target: https://travis-ci.org/boto/boto
@@ -34,6 +34,8 @@ At the moment, boto supports:
   * Amazon Elastic Map Reduce (EMR) (Python 3)
   * AutoScaling (Python 3)
   * Amazon Kinesis (Python 3)
+  * AWS Lambda (Python 3)
+  * Amazon EC2 Container Service (Python 3)
 
 * Content Delivery
 
@@ -54,14 +56,19 @@ At the moment, boto supports:
   * AWS Data Pipeline (Python 3)
   * AWS Opsworks (Python 3)
   * AWS CloudTrail (Python 3)
+  * AWS CodeDeploy (Python 3)
 
-* Identity & Access
+* Administration & Security
 
   * AWS Identity and Access Management (IAM) (Python 3)
+  * AWS Key Management Service (KMS) (Python 3)
+  * AWS Config (Python 3)
+  * AWS CloudHSM (Python 3)
 
 * Application Services
 
   * Amazon CloudSearch (Python 3)
+  * Amazon CloudSearch Domain (Python 3)
   * Amazon Elastic Transcoder (Python 3)
   * Amazon Simple Workflow Service (SWF) (Python 3)
   * Amazon Simple Queue Service (SQS) (Python 3)
@@ -179,7 +186,7 @@ boto config file.  See `this`_ for details.
 .. _github.com: http://github.com/boto/boto
 .. _Online documentation: http://docs.pythonboto.org
 .. _Python Cheese Shop: http://pypi.python.org/pypi/boto
-.. _this: http://code.google.com/p/boto/wiki/BotoConfig
+.. _this: http://docs.pythonboto.org/en/latest/boto_config_tut.html
 .. _gitflow: http://nvie.com/posts/a-successful-git-branching-model/
 .. _neo: https://github.com/boto/boto/tree/neo
 .. _boto-users Google Group: https://groups.google.com/forum/?fromgroups#!forum/boto-users

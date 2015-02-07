@@ -98,7 +98,7 @@ class ELBConnection(AWSQueryConnection):
                                             profile_name=profile_name)
 
     def _required_auth_capability(self):
-        return ['ec2']
+        return ['hmac-v4']
 
     def build_list_params(self, params, items, label):
         if isinstance(items, six.string_types):
@@ -695,9 +695,9 @@ class ELBConnection(AWSQueryConnection):
 
     def apply_security_groups_to_lb(self, name, security_groups):
         """
-        Applies security groups to the load balancer.
-        Applying security groups that are already registered with the
-        Load Balancer has no effect.
+        Associates one or more security groups with the load balancer.
+        The provided security groups will override any currently applied
+        security groups.
 
         :type name: string
         :param name: The name of the Load Balancer
